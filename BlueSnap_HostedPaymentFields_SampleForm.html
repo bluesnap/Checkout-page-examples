@@ -1,0 +1,123 @@
+<!--Example checkout form with BlueSnap Hosted Payment Fields. For help, see http://developers.bluesnap.com/docs/hosted-payment-fields-->
+<!--Replace BLUESNAPDOMAINPATH with https://sandbox.bluesnap.com in Sandbox or with https://ws.bluesnap.com in Production.-->
+<!DOCTYPE html>
+<html>
+	
+	<head>
+		<meta charset="UTF-8">
+	</head>
+	
+	<body>
+		<!--Insert the relevant URL for the form action-->
+		<form action="your-form-handling-page" method="POST" id="checkout-form" onsubmit="return do_when_clicking_submit_button()">
+			
+			<div>
+				<label for="FirstName">Name on Card</label>
+				<input type="text" name="cardholder-name" id="cardholder-name">
+			</div>
+			
+			<!--Hosted Field for CC number-->
+			<div data-bluesnap="ccn"></div>
+			
+			<!--Hosted Field for CC EXP-->
+			<div data-bluesnap="exp"></div>
+			
+			<!--Hosted Field for CC CVV-->
+			<div data-bluesnap="cvv"></div>
+			
+			<button type="submit" id="submit-button">Buy Now</button>
+			
+		</form>
+		<!--Adds the BlueSnap Hosted Payment Fields JavaScript file-->
+		<script type="text/javascript" src="BLUESNAPDOMAINPATH/services/hosted-payment-fields/v1.0/bluesnap.hpf.mini.js"></script>
+		
+		<!--Initiates the Hosted Fields script with your Hosted Payment Fields token-->
+		<script>
+			var bsObj = {
+				hostedPaymentFields: {
+					ccn: "ccn", // name cannot contain spaces or special characters 
+					cvv: "cvv", // name cannot contain spaces or special characters 
+					exp: "exp"  // name cannot contain spaces or special characters 
+				},
+				onFieldEventHandler: {
+					onFocus: function(tagId) { 
+						// Handle focus  
+					},
+					onBlur: function(tagId) {
+						// Handle blur  
+					},
+					onError: function(tagId, errorCode) { 
+						// Handle a change in validation
+						/* error codes:
+							"001" --> "Please enter a valid credit card number";			
+							"002" --> "Please enter the CVV/CVC of your card";			
+							"003" --> "Please enter your credit card's expiration date";			
+							"004" --> "Session expired please refresh page to continue";			
+							"005" --> "Internal server error please try again later";			
+						*/
+					},
+					onEmpty: function(tagId, errorCode) { 
+						// Handle a change in validation  
+						/* error codes:
+							"001" --> "Please enter a valid credit card number";			
+							"002" --> "Please enter the CVV/CVC of your card";			
+							"003" --> "Please enter your credit card's expiration date";			
+							"004" --> "Session expired please refresh page to continue";			
+							"005" --> "Internal server error please try again later";			
+						*/
+					},
+					onType: function(tagId, cardType) {
+						/* get card type from cardType and display the img accordingly
+							<img data-name="AmericanExpress" src="/services/hosted-payment-fields/cc-types/amex.png">
+							<img data-name="DinersClub" src="/services/hosted-payment-fields/cc-types/diners.png">
+							<img data-name="Discover" src="/services/hosted-payment-fields/cc-types/discover.png">
+							<img data-name="JCB" src="/services/hosted-payment-fields/cc-types/jcb.png">
+							<img data-name="MaestroUK" src="/services/hosted-payment-fields/cc-types/maestro.png">
+							<img data-name="MasterCard" src="/services/hosted-payment-fields/cc-types/mastercard.png">
+							<img data-name="Visa" src="/services/hosted-payment-fields/cc-types/visa.png">
+							<img data-name="Solo" src="/services/hosted-payment-fields/cc-types/solo.png">
+							<img data-name="CarteBleue" src="/services/hosted-payment-fields/cc-types/cb.png">           
+						*/	
+					},
+					onValid: function(tagId) {
+						// Handle a change in validation
+					}
+				},				  					  
+				//styling is optional
+				style: {
+					// Styling all elements
+					"input": {
+						"font-size": "18pt"
+					},
+					
+					// Styling a specific field
+					"#ccn": {
+						"font-family": "sans-serif"
+					},
+					
+					// Styling element state
+					":focus": {
+						"color": "green"
+					}
+				}
+			};
+			bluesnap.hostedPaymentFieldsCreation ("HOSTEDFIELDTOKENID", bsObj);
+		</script>
+		
+		<!--Submits the credit card, expiration date and CVV data to BlueSnap, where it will be associated with the Hosted Payment Fields token. On success, a card data object containing the card type and last four digits will be be passed to the function (cardData). You should add a function to do the final submit of the form after the card type and last four digits are received.
+		-->
+		<script>
+			
+			function do_when_clicking_submit_button(){						   
+				bluesnap.submitCredentials( function(cardData){
+					console.log('the card type is ' + cardData.ccType + ' and last 4 digits are ' + cardData.last4Digits + ' and exp is ' + cardData.exp + ' after that I can call final submit');
+				});
+				/* submit the form
+				return true; */
+				return false; // don't submit the form
+			}					
+		</script>
+		
+	</body>
+	
+</html>

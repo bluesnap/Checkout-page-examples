@@ -6,7 +6,7 @@ This example shows an implementation of BlueSnap's Hosted Payment Fields, includ
 > Note that this will not work when using file:// origin, so you must put it on a web server for testing purposes.
 
 For more information, see:
-[http://developers.bluesnap.com/docs/hosted-payment-fields](http://developers.bluesnap.com/docs/hosted-payment-fields)
+[http://developers.bluesnap.com/v4.0/docs/hosted-payment-fields](http://developers.bluesnap.com/v4.0/docs/hosted-payment-fields)
 
 ##BlueSnap_CheckoutForm_CSE_Tutorial.html
 This example shows an implementation of BlueSnap's client-side encryption.
